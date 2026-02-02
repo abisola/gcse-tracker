@@ -12,6 +12,16 @@
         .confidence-btn:hover {
             transform: scale(1.05);
         }
+        /* Hide scrollbar for Chrome, Safari and Opera */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+
+        /* Hide scrollbar for IE, Edge and Firefox */
+        .no-scrollbar {
+            -ms-overflow-style: none;  /* IE and Edge */
+            scrollbar-width: none;  /* Firefox */
+        }
     </style>
 </head>
 <body class="bg-gray-50">
@@ -243,21 +253,23 @@
 
                     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
                         {/* Tabs */}
-                        <div className="flex space-x-1 bg-gray-200 p-1 rounded-lg mb-6">
+                       <div className="flex overflow-x-auto no-scrollbar pb-2 mb-6 -mx-4 px-4 sm:mx-0 sm:px-0 space-x-2 bg-transparent sm:bg-gray-200 sm:p-1 sm:rounded-lg">
                             {Object.keys(scienceTopics).map(subject => {
                                 const progress = getSubjectProgress(subject);
                                 return (
                                     <button
                                         key={subject}
                                         onClick={() => setActiveTab(subject)}
-                                        className={`flex-1 py-3 px-4 rounded-md font-medium transition-all ${
+                                        className={`flex-none min-w-[100px] sm:flex-1 py-3 px-4 rounded-md font-medium transition-all ${
                                             activeTab === subject
-                                                ? 'bg-white text-gray-900 shadow'
-                                                : 'text-gray-600 hover:text-gray-900'
+                                                ? 'bg-white text-gray-900 shadow ring-1 ring-black ring-opacity-5'
+                                                : 'bg-gray-100 sm:bg-transparent text-gray-600 hover:text-gray-900'
                                         }`}
                                     >
                                         <div className="flex flex-col items-center">
-                                            <span className="capitalize">{subject === 'religiousstudies' ? 'RE' : subject}</span>
+                                            <span className="capitalize whitespace-nowrap">
+                                                {subject === 'religiousstudies' ? 'RE' : subject}
+                                            </span>
                                             <span className="text-xs mt-1 opacity-75">{Math.round(progress.percentage)}%</span>
                                         </div>
                                     </button>
