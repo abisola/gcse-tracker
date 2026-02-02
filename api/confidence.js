@@ -1,24 +1,24 @@
-import { kv } from '@vercel/kv';
+import { Redis } from '@upstash/redis';
+
+// Vercel/Upstash will automatically provide these environment variables
+const redis = Redis.fromEnv();
 
 export default async function handler(request, response) {
-  // We will use a hardcoded key since this is a personal tracker.
-  // If you wanted multiple users, you'd need a login system.
   const DATA_KEY = 'gcse_science_tracker_data';
 
   try {
     if (request.method === 'GET') {
-      // Load data
-      const data = await kv.get(DATA_KEY);
+      const data = await redis.get(DATA_KEY);
+      // Upstash returns the object directly, but let's ensure it's JSON
       return response.status(200).json(data || {});
     } 
     else if (request.method === 'POST') {
-      // Save data
       const body = request.body;
-      await kv.set(DATA_KEY, body);
+      await redis.set(DATA_KEY, body);
       return response.status(200).json({ success: true });
     }
   } catch (error) {
-    console.error(error);
+    console.error('Redis Error:', error);
     return response.status(500).json({ error: 'Database error' });
   }
 }
